@@ -1,0 +1,232 @@
+/* ============================================================
+   AGRICONNECT — Responsive Stylesheet
+   ALL media queries live here. Loaded LAST.
+   ============================================================ */
+
+/* ============================================================
+   TABLET LANDSCAPE AND BELOW (≤ 1024px)
+   ============================================================ */
+@media (max-width: 1024px) {
+    /* Grid collapses */
+    .agri-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Admin sidebar narrows */
+    .admin-layout {
+        grid-template-columns: 220px 1fr;
+    }
+
+    .admin-content {
+        padding: var(--agri-space-4);
+    }
+}
+
+/* ============================================================
+   TABLET PORTRAIT AND BELOW (≤ 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Typography scales down */
+    :root {
+        --agri-text-5xl: 2.25rem;
+        --agri-text-4xl: 1.875rem;
+        --agri-text-3xl: 1.5rem;
+        --agri-text-2xl: 1.25rem;
+    }
+
+    /* Sections tighter */
+    .agri-section {
+        padding: var(--agri-space-10) 0;
+    }
+
+    /* Grids collapse */
+    .agri-grid-2,
+    .agri-grid-3,
+    .agri-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Hero tighter */
+    .agri-hero {
+        padding: var(--agri-space-12) 0;
+    }
+
+    .agri-hero h1 {
+        font-size: 2rem;
+    }
+
+    .agri-hero p {
+        font-size: var(--agri-text-base);
+    }
+
+    .agri-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* Navbar mobile: hide links by default */
+    .agri-nav-links {
+        display: none;
+    }
+
+    /* ---------- ADMIN ---------- */
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Sidebar slides in from left */
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        z-index: var(--agri-z-modal);
+        transform: translateX(-100%);
+        transition: transform var(--agri-transition-base);
+    }
+
+    .admin-sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    /* Show toggle button */
+    .admin-menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .admin-topbar {
+        padding: var(--agri-space-3) var(--agri-space-4);
+    }
+
+    .admin-topbar-title {
+        font-size: var(--agri-text-lg);
+    }
+
+    /* Stats stack 2-per-row */
+    .admin-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Table becomes scrollable */
+    .admin-card-body-flush {
+        overflow-x: auto;
+    }
+
+    .admin-table {
+        min-width: 640px;
+    }
+
+    /* Login card padding */
+    .admin-login-card {
+        padding: var(--agri-space-6);
+    }
+}
+
+/* ============================================================
+   MOBILE (≤ 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+    :root {
+        --agri-text-5xl: 1.875rem;
+        --agri-text-4xl: 1.5rem;
+        --agri-text-3xl: 1.375rem;
+    }
+
+    .agri-container {
+        padding: 0 var(--agri-space-3);
+    }
+
+    .agri-btn {
+        padding: var(--agri-space-3) var(--agri-space-4);
+    }
+
+    .agri-btn-lg {
+        padding: var(--agri-space-3) var(--agri-space-6);
+        font-size: var(--agri-text-base);
+    }
+
+    .agri-card {
+        padding: var(--agri-space-4);
+    }
+
+    .agri-stat-value {
+        font-size: var(--agri-text-2xl);
+    }
+
+    /* Admin stats stack */
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-content {
+        padding: var(--agri-space-3);
+    }
+
+    .admin-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-filters .agri-input,
+    .admin-filters .agri-select {
+        max-width: 100%;
+    }
+}
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+@media print {
+    .agri-navbar,
+    .agri-footer,
+    .admin-sidebar,
+    .admin-topbar,
+    .agri-btn {
+        display: none !important;
+    }
+
+    body {
+        background: var(--agri-white);
+        color: #000;
+    }
+
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .agri-card,
+    .admin-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+}
+
+/* ============================================================
+   ACCESSIBILITY: Reduced Motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================================
+   DARK MODE SUPPORT (opt-in, non-breaking)
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+    /* Skip for now — would override brand identity.
+       Enable only on request. */
+}

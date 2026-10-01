@@ -1,0 +1,543 @@
+/* ============================================================
+   AGRICONNECT — Admin Dashboard Stylesheet
+   Extends style.css (must be loaded AFTER style.css)
+   ============================================================ */
+
+/* ============================================================
+   1. ADMIN LAYOUT
+   ============================================================ */
+.admin-body {
+    background: var(--agri-gray-100);
+    min-height: 100vh;
+}
+
+.admin-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+}
+
+/* ============================================================
+   2. SIDEBAR
+   ============================================================ */
+.admin-sidebar {
+    background: var(--agri-green-dark);
+    color: var(--agri-white);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--agri-space-3);
+    padding: var(--agri-space-5) var(--agri-space-5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-sidebar-brand .agri-logo-mark {
+    background: var(--agri-white);
+    color: var(--agri-green-dark);
+}
+
+.admin-sidebar-brand-text {
+    font-weight: 800;
+    font-size: var(--agri-text-base);
+    color: var(--agri-white);
+    line-height: 1.2;
+}
+
+.admin-sidebar-brand-text small {
+    display: block;
+    font-weight: 500;
+    font-size: var(--agri-text-xs);
+    color: var(--agri-green-200);
+    margin-top: 2px;
+}
+
+.admin-nav {
+    flex: 1;
+    padding: var(--agri-space-4) 0;
+    list-style: none;
+    margin: 0;
+}
+
+.admin-nav-section {
+    padding: var(--agri-space-3) var(--agri-space-5);
+    font-size: var(--agri-text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--agri-green-200);
+    font-weight: 600;
+    margin-top: var(--agri-space-3);
+}
+
+.admin-nav a {
+    display: flex;
+    align-items: center;
+    gap: var(--agri-space-3);
+    padding: var(--agri-space-3) var(--agri-space-5);
+    color: rgba(255, 255, 255, 0.82);
+    font-size: var(--agri-text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all var(--agri-transition-fast);
+}
+
+.admin-nav a:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--agri-white);
+    text-decoration: none;
+}
+
+.admin-nav a.is-active {
+    background: rgba(255, 255, 255, 0.10);
+    color: var(--agri-white);
+    border-left-color: var(--agri-orange);
+    font-weight: 600;
+}
+
+.admin-nav-icon {
+    width: 20px;
+    text-align: center;
+    opacity: 0.9;
+    flex-shrink: 0;
+}
+
+.admin-nav-badge {
+    margin-left: auto;
+    background: var(--agri-orange);
+    color: var(--agri-white);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: var(--agri-radius-full);
+    line-height: 1.4;
+}
+
+.admin-sidebar-footer {
+    padding: var(--agri-space-4) var(--agri-space-5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: var(--agri-text-xs);
+    color: var(--agri-green-200);
+}
+
+/* ============================================================
+   3. MAIN AREA
+   ============================================================ */
+.admin-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* ============================================================
+   4. TOPBAR
+   ============================================================ */
+.admin-topbar {
+    background: var(--agri-white);
+    border-bottom: 1px solid var(--agri-border);
+    padding: var(--agri-space-4) var(--agri-space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: var(--agri-z-sticky);
+    box-shadow: var(--agri-shadow-xs);
+}
+
+.admin-topbar-title {
+    font-size: var(--agri-text-xl);
+    font-weight: 700;
+    margin: 0;
+    color: var(--agri-gray-900);
+}
+
+.admin-topbar-subtitle {
+    font-size: var(--agri-text-sm);
+    color: var(--agri-gray-500);
+    margin: 2px 0 0;
+}
+
+.admin-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--agri-space-3);
+}
+
+.admin-user-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--agri-space-2);
+    padding: var(--agri-space-2);
+    border-radius: var(--agri-radius-md);
+    cursor: pointer;
+    transition: background var(--agri-transition-fast);
+}
+
+.admin-user-menu:hover {
+    background: var(--agri-gray-100);
+}
+
+.admin-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--agri-radius-full);
+    background: var(--agri-green-medium);
+    color: var(--agri-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--agri-text-sm);
+}
+
+/* ============================================================
+   5. CONTENT AREA
+   ============================================================ */
+.admin-content {
+    padding: var(--agri-space-6);
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--agri-space-4);
+    margin-bottom: var(--agri-space-6);
+}
+
+.admin-page-header h2 {
+    margin: 0;
+    font-size: var(--agri-text-2xl);
+}
+
+.admin-page-actions {
+    display: flex;
+    gap: var(--agri-space-2);
+    flex-wrap: wrap;
+}
+
+/* ============================================================
+   6. DASHBOARD STATS GRID
+   ============================================================ */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--agri-space-4);
+    margin-bottom: var(--agri-space-6);
+}
+
+/* ============================================================
+   7. ADMIN CARDS (extends .agri-card)
+   ============================================================ */
+.admin-card {
+    background: var(--agri-white);
+    border: 1px solid var(--agri-border);
+    border-radius: var(--agri-radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--agri-space-6);
+    box-shadow: var(--agri-shadow-xs);
+}
+
+.admin-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--agri-space-4) var(--agri-space-6);
+    border-bottom: 1px solid var(--agri-border);
+    background: var(--agri-white);
+}
+
+.admin-card-title {
+    font-size: var(--agri-text-base);
+    font-weight: 700;
+    margin: 0;
+    color: var(--agri-gray-900);
+}
+
+.admin-card-body {
+    padding: var(--agri-space-6);
+}
+
+.admin-card-body-flush {
+    padding: 0;
+}
+
+/* ============================================================
+   8. ADMIN TABLE ENHANCEMENTS
+   ============================================================ */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--agri-text-sm);
+}
+
+.admin-table th {
+    text-align: left;
+    padding: var(--agri-space-3) var(--agri-space-4);
+    background: var(--agri-gray-100);
+    color: var(--agri-gray-600);
+    font-size: var(--agri-text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--agri-border);
+}
+
+.admin-table td {
+    padding: var(--agri-space-3) var(--agri-space-4);
+    border-bottom: 1px solid var(--agri-border);
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+    background: var(--agri-gray-100);
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table-actions {
+    display: flex;
+    gap: var(--agri-space-2);
+}
+
+.admin-table-actions a {
+    font-size: var(--agri-text-xs);
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--agri-radius-sm);
+    text-decoration: none;
+}
+
+.admin-action-view {
+    background: var(--agri-gray-100);
+    color: var(--agri-gray-700);
+}
+
+.admin-action-edit {
+    background: var(--agri-green-50);
+    color: var(--agri-green-dark);
+}
+
+.admin-action-delete {
+    background: var(--agri-red-50);
+    color: var(--agri-red);
+}
+
+/* ============================================================
+   9. ADMIN LOGIN PAGE
+   ============================================================ */
+.admin-login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--agri-space-4);
+    background: linear-gradient(135deg,
+                var(--agri-green-dark) 0%,
+                var(--agri-green-medium) 100%);
+}
+
+.admin-login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--agri-white);
+    border-radius: var(--agri-radius-xl);
+    padding: var(--agri-space-10);
+    box-shadow: var(--agri-shadow-xl);
+}
+
+.admin-login-header {
+    text-align: center;
+    margin-bottom: var(--agri-space-8);
+}
+
+.admin-login-header .agri-logo-mark {
+    width: 56px;
+    height: 56px;
+    font-size: var(--agri-text-lg);
+    margin: 0 auto var(--agri-space-4);
+}
+
+.admin-login-header h1 {
+    font-size: var(--agri-text-2xl);
+    margin-bottom: var(--agri-space-2);
+}
+
+.admin-login-header p {
+    color: var(--agri-gray-500);
+    font-size: var(--agri-text-sm);
+    margin: 0;
+}
+
+/* ============================================================
+   10. FILTER BAR
+   ============================================================ */
+.admin-filters {
+    display: flex;
+    gap: var(--agri-space-3);
+    align-items: center;
+    flex-wrap: wrap;
+    padding: var(--agri-space-4) var(--agri-space-6);
+    background: var(--agri-gray-100);
+    border-bottom: 1px solid var(--agri-border);
+}
+
+.admin-filters .agri-input,
+.admin-filters .agri-select {
+    padding: var(--agri-space-2) var(--agri-space-3);
+    font-size: var(--agri-text-sm);
+    max-width: 220px;
+}
+
+/* ============================================================
+   11. PAGINATION
+   ============================================================ */
+.admin-pagination {
+    display: flex;
+    justify-content: center;
+    gap: var(--agri-space-1);
+    padding: var(--agri-space-4);
+    list-style: none;
+    margin: 0;
+}
+
+.admin-pagination a,
+.admin-pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 var(--agri-space-3);
+    border-radius: var(--agri-radius-md);
+    background: var(--agri-white);
+    border: 1px solid var(--agri-border);
+    color: var(--agri-gray-700);
+    font-size: var(--agri-text-sm);
+    text-decoration: none;
+    transition: all var(--agri-transition-fast);
+}
+
+.admin-pagination a:hover {
+    background: var(--agri-green-50);
+    border-color: var(--agri-green-medium);
+    color: var(--agri-green-dark);
+    text-decoration: none;
+}
+
+.admin-pagination .is-active span {
+    background: var(--agri-green-medium);
+    border-color: var(--agri-green-medium);
+    color: var(--agri-white);
+}
+
+/* ============================================================
+   12. MODAL
+   ============================================================ */
+.admin-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 24, 29, 0.6);
+    z-index: var(--agri-z-modal);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--agri-space-4);
+}
+
+.admin-modal-backdrop.is-open {
+    display: flex;
+}
+
+.admin-modal {
+    background: var(--agri-white);
+    border-radius: var(--agri-radius-lg);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--agri-shadow-xl);
+}
+
+.admin-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--agri-space-5) var(--agri-space-6);
+    border-bottom: 1px solid var(--agri-border);
+}
+
+.admin-modal-title {
+    font-size: var(--agri-text-lg);
+    font-weight: 700;
+    margin: 0;
+}
+
+.admin-modal-close {
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--agri-gray-500);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--agri-radius-md);
+    transition: all var(--agri-transition-fast);
+}
+
+.admin-modal-close:hover {
+    background: var(--agri-gray-100);
+    color: var(--agri-gray-900);
+}
+
+.admin-modal-body {
+    padding: var(--agri-space-6);
+}
+
+.admin-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--agri-space-3);
+    padding: var(--agri-space-4) var(--agri-space-6);
+    border-top: 1px solid var(--agri-border);
+    background: var(--agri-gray-100);
+}
+
+/* ============================================================
+   13. MOBILE SIDEBAR TOGGLE
+   ============================================================ */
+.admin-menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    color: var(--agri-gray-700);
+    padding: var(--agri-space-2);
+    border-radius: var(--agri-radius-md);
+}
+
+.admin-menu-toggle:hover {
+    background: var(--agri-gray-100);
+}
+
+.admin-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 24, 29, 0.5);
+    z-index: calc(var(--agri-z-sticky) - 1);
+}
+
+.admin-sidebar-backdrop.is-open {
+    display: block;
+}

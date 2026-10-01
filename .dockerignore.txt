@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env
+.env.*
+logs/*.log
+uploads/temp/*
+node_modules
+vendor
+*.md
+!README.md
+.DS_Store
+.idea
+.vscode
+secrets.php
+includes/secrets.php

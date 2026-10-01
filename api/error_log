@@ -1,0 +1,16 @@
+[26-Sep-2026 08:14:04 UTC] PHP Warning:  require_once(/home/mubeetec/biz.mubeetech.com.ng/api/../includes/config.php): Failed to open stream: No such file or directory in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php on line 12
+[26-Sep-2026 08:14:04 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/mubeetec/biz.mubeetech.com.ng/api/../includes/config.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php on line 12
+[26-Sep-2026 08:14:13 UTC] PHP Warning:  require_once(/home/mubeetec/biz.mubeetech.com.ng/api/../includes/config.php): Failed to open stream: No such file or directory in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php on line 12
+[26-Sep-2026 08:14:13 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/mubeetec/biz.mubeetech.com.ng/api/../includes/config.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php:12
+Stack trace:
+#0 {main}
+  thrown in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php on line 12
+[26-Sep-2026 10:03:11 UTC] PHP Warning:  file_put_contents(/home/mubeetec/biz.mubeetech.com.ng/api/../logs/ussd_activity.log): Failed to open stream: No such file or directory in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php on line 31
+[26-Sep-2026 10:03:11 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function agri_query() in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php:213
+Stack trace:
+#0 /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php(35): ensureFarmerExists()
+#1 {main}
+  thrown in /home/mubeetec/biz.mubeetech.com.ng/api/ussd.php on line 213

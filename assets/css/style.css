@@ -1,0 +1,948 @@
+/* ============================================================
+   AGRICONNECT — Global Stylesheet
+   Brand palette inspired by Africa's Talking
+   Author: MubeeTech
+   ============================================================ */
+
+/* ============================================================
+   1. DESIGN TOKENS (CSS VARIABLES)
+   ============================================================ */
+:root {
+    /* --- Brand Colors --- */
+    --agri-green-dark:    #22612E;
+    --agri-green-medium:  #22723B;
+    --agri-green-bright:  #2C963F;
+    --agri-orange:        #F18114;
+    --agri-red:           #E7202A;
+
+    /* --- Derived / Tinted Colors --- */
+    --agri-green-50:      #EAF3EC;
+    --agri-green-100:     #CDE3D2;
+    --agri-green-200:     #A5CDAF;
+    --agri-green-900:     #143B1C;
+
+    --agri-orange-50:     #FEF3E6;
+    --agri-orange-100:    #FCE0BC;
+    --agri-orange-900:    #A8590D;
+
+    --agri-red-50:        #FDECEC;
+    --agri-red-100:       #F9C9CB;
+
+    /* --- Neutrals --- */
+    --agri-white:         #FFFFFF;
+    --agri-off-white:     #F8F9FA;
+    --agri-gray-100:      #F1F3F5;
+    --agri-gray-200:      #E1E5E9;
+    --agri-gray-300:      #C9CFD6;
+    --agri-gray-400:      #9AA3AE;
+    --agri-gray-500:      #6C7680;
+    --agri-gray-600:      #4B545E;
+    --agri-gray-700:      #2E353D;
+    --agri-gray-900:      #14181D;
+
+    /* --- Semantic --- */
+    --agri-success:       var(--agri-green-bright);
+    --agri-warning:       var(--agri-orange);
+    --agri-danger:        var(--agri-red);
+    --agri-info:          #1E6FBF;
+
+    /* --- Surfaces --- */
+    --agri-bg:            var(--agri-off-white);
+    --agri-surface:       var(--agri-white);
+    --agri-surface-alt:   var(--agri-gray-100);
+    --agri-border:        var(--agri-gray-200);
+    --agri-border-strong: var(--agri-gray-300);
+
+    /* --- Typography --- */
+    --agri-font-sans:     -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                          'Inter', 'Helvetica Neue', Arial, sans-serif;
+    --agri-font-mono:     'SF Mono', Monaco, 'Cascadia Code', Menlo, monospace;
+
+    --agri-text-xs:       0.75rem;    /* 12px */
+    --agri-text-sm:       0.875rem;   /* 14px */
+    --agri-text-base:     1rem;       /* 16px */
+    --agri-text-lg:       1.125rem;   /* 18px */
+    --agri-text-xl:       1.25rem;    /* 20px */
+    --agri-text-2xl:      1.5rem;     /* 24px */
+    --agri-text-3xl:      1.875rem;   /* 30px */
+    --agri-text-4xl:      2.25rem;    /* 36px */
+    --agri-text-5xl:      3rem;       /* 48px */
+
+    --agri-leading-tight: 1.25;
+    --agri-leading-base:  1.5;
+    --agri-leading-loose: 1.75;
+
+    /* --- Spacing Scale --- */
+    --agri-space-1:  0.25rem;  /*  4px */
+    --agri-space-2:  0.5rem;   /*  8px */
+    --agri-space-3:  0.75rem;  /* 12px */
+    --agri-space-4:  1rem;     /* 16px */
+    --agri-space-5:  1.25rem;  /* 20px */
+    --agri-space-6:  1.5rem;   /* 24px */
+    --agri-space-8:  2rem;     /* 32px */
+    --agri-space-10: 2.5rem;   /* 40px */
+    --agri-space-12: 3rem;     /* 48px */
+    --agri-space-16: 4rem;     /* 64px */
+    --agri-space-20: 5rem;     /* 80px */
+
+    /* --- Radii --- */
+    --agri-radius-sm:   4px;
+    --agri-radius-md:   8px;
+    --agri-radius-lg:   12px;
+    --agri-radius-xl:   16px;
+    --agri-radius-full: 9999px;
+
+    /* --- Shadows --- */
+    --agri-shadow-xs: 0 1px 2px rgba(20, 24, 29, 0.05);
+    --agri-shadow-sm: 0 1px 3px rgba(20, 24, 29, 0.08), 0 1px 2px rgba(20, 24, 29, 0.04);
+    --agri-shadow-md: 0 4px 12px rgba(20, 24, 29, 0.08), 0 2px 4px rgba(20, 24, 29, 0.04);
+    --agri-shadow-lg: 0 12px 32px rgba(20, 24, 29, 0.10), 0 4px 8px rgba(20, 24, 29, 0.04);
+    --agri-shadow-xl: 0 24px 48px rgba(20, 24, 29, 0.12);
+
+    /* --- Transitions --- */
+    --agri-transition-fast:   150ms ease;
+    --agri-transition-base:   250ms ease;
+    --agri-transition-slow:   400ms ease;
+
+    /* --- Layout --- */
+    --agri-container-max: 1200px;
+    --agri-header-height: 64px;
+
+    /* --- Z-Index Scale --- */
+    --agri-z-base:    1;
+    --agri-z-dropdown: 100;
+    --agri-z-sticky:  200;
+    --agri-z-modal:   500;
+    --agri-z-toast:   700;
+    --agri-z-top:     999;
+}
+
+/* ============================================================
+   2. RESET / NORMALIZE
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--agri-font-sans);
+    font-size: var(--agri-text-base);
+    line-height: var(--agri-leading-base);
+    color: var(--agri-gray-700);
+    background-color: var(--agri-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 var(--agri-space-3);
+    font-weight: 700;
+    line-height: var(--agri-leading-tight);
+    color: var(--agri-gray-900);
+}
+
+h1 { font-size: var(--agri-text-4xl); }
+h2 { font-size: var(--agri-text-3xl); }
+h3 { font-size: var(--agri-text-2xl); }
+h4 { font-size: var(--agri-text-xl); }
+h5 { font-size: var(--agri-text-lg); }
+h6 { font-size: var(--agri-text-base); }
+
+p {
+    margin: 0 0 var(--agri-space-4);
+}
+
+a {
+    color: var(--agri-green-medium);
+    text-decoration: none;
+    transition: color var(--agri-transition-fast);
+}
+
+a:hover {
+    color: var(--agri-green-dark);
+    text-decoration: underline;
+}
+
+img, svg, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button, input, select, textarea {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+ul, ol {
+    margin: 0 0 var(--agri-space-4);
+    padding-left: var(--agri-space-6);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--agri-border);
+    margin: var(--agri-space-6) 0;
+}
+
+code, pre {
+    font-family: var(--agri-font-mono);
+    font-size: 0.9em;
+    background: var(--agri-gray-100);
+    border-radius: var(--agri-radius-sm);
+}
+
+code {
+    padding: 2px 6px;
+}
+
+pre {
+    padding: var(--agri-space-4);
+    overflow-x: auto;
+}
+
+/* ============================================================
+   3. LAYOUT PRIMITIVES
+   ============================================================ */
+.agri-container {
+    width: 100%;
+    max-width: var(--agri-container-max);
+    margin: 0 auto;
+    padding: 0 var(--agri-space-4);
+}
+
+.agri-container-narrow {
+    max-width: 800px;
+}
+
+.agri-container-wide {
+    max-width: 1400px;
+}
+
+.agri-section {
+    padding: var(--agri-space-16) 0;
+}
+
+.agri-section-sm {
+    padding: var(--agri-space-10) 0;
+}
+
+.agri-grid {
+    display: grid;
+    gap: var(--agri-space-6);
+}
+
+.agri-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.agri-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.agri-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+.agri-flex {
+    display: flex;
+    gap: var(--agri-space-4);
+}
+
+.agri-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.agri-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ============================================================
+   4. TYPOGRAPHY UTILITIES
+   ============================================================ */
+.agri-text-xs   { font-size: var(--agri-text-xs); }
+.agri-text-sm   { font-size: var(--agri-text-sm); }
+.agri-text-lg   { font-size: var(--agri-text-lg); }
+.agri-text-xl   { font-size: var(--agri-text-xl); }
+
+.agri-text-muted   { color: var(--agri-gray-500); }
+.agri-text-dark    { color: var(--agri-gray-900); }
+.agri-text-success { color: var(--agri-success); }
+.agri-text-warning { color: var(--agri-warning); }
+.agri-text-danger  { color: var(--agri-danger); }
+
+.agri-text-center { text-align: center; }
+.agri-text-right  { text-align: right; }
+
+.agri-font-bold { font-weight: 700; }
+.agri-font-medium { font-weight: 500; }
+
+.agri-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: var(--agri-text-xs);
+    font-weight: 600;
+}
+
+/* ============================================================
+   5. BUTTONS
+   ============================================================ */
+.agri-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--agri-space-2);
+    padding: var(--agri-space-3) var(--agri-space-6);
+    font-size: var(--agri-text-base);
+    font-weight: 600;
+    line-height: 1;
+    border-radius: var(--agri-radius-md);
+    border: 2px solid transparent;
+    transition: all var(--agri-transition-fast);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.agri-btn:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.agri-btn:active {
+    transform: translateY(0);
+}
+
+.agri-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Primary — Brand Green */
+.agri-btn-primary {
+    background: var(--agri-green-medium);
+    color: var(--agri-white);
+    box-shadow: var(--agri-shadow-sm);
+}
+
+.agri-btn-primary:hover {
+    background: var(--agri-green-dark);
+    color: var(--agri-white);
+    box-shadow: var(--agri-shadow-md);
+}
+
+/* Secondary — Outline */
+.agri-btn-secondary {
+    background: var(--agri-white);
+    color: var(--agri-green-medium);
+    border-color: var(--agri-green-medium);
+}
+
+.agri-btn-secondary:hover {
+    background: var(--agri-green-50);
+    color: var(--agri-green-dark);
+}
+
+/* Accent — Orange */
+.agri-btn-accent {
+    background: var(--agri-orange);
+    color: var(--agri-white);
+    box-shadow: var(--agri-shadow-sm);
+}
+
+.agri-btn-accent:hover {
+    background: var(--agri-orange-900);
+    color: var(--agri-white);
+    box-shadow: var(--agri-shadow-md);
+}
+
+/* Danger */
+.agri-btn-danger {
+    background: var(--agri-red);
+    color: var(--agri-white);
+}
+
+.agri-btn-danger:hover {
+    background: #B81820;
+    color: var(--agri-white);
+}
+
+/* Ghost */
+.agri-btn-ghost {
+    background: transparent;
+    color: var(--agri-gray-700);
+    border-color: var(--agri-border);
+}
+
+.agri-btn-ghost:hover {
+    background: var(--agri-gray-100);
+    color: var(--agri-gray-900);
+}
+
+/* Sizes */
+.agri-btn-sm {
+    padding: var(--agri-space-2) var(--agri-space-4);
+    font-size: var(--agri-text-sm);
+}
+
+.agri-btn-lg {
+    padding: var(--agri-space-4) var(--agri-space-8);
+    font-size: var(--agri-text-lg);
+}
+
+.agri-btn-block {
+    width: 100%;
+}
+
+/* ============================================================
+   6. FORMS
+   ============================================================ */
+.agri-form-group {
+    margin-bottom: var(--agri-space-5);
+}
+
+.agri-label {
+    display: block;
+    margin-bottom: var(--agri-space-2);
+    font-size: var(--agri-text-sm);
+    font-weight: 600;
+    color: var(--agri-gray-700);
+}
+
+.agri-label-required::after {
+    content: ' *';
+    color: var(--agri-red);
+}
+
+.agri-input,
+.agri-select,
+.agri-textarea {
+    width: 100%;
+    padding: var(--agri-space-3) var(--agri-space-4);
+    font-size: var(--agri-text-base);
+    color: var(--agri-gray-900);
+    background: var(--agri-white);
+    border: 1px solid var(--agri-border-strong);
+    border-radius: var(--agri-radius-md);
+    transition: border-color var(--agri-transition-fast),
+                box-shadow var(--agri-transition-fast);
+}
+
+.agri-input:focus,
+.agri-select:focus,
+.agri-textarea:focus {
+    outline: none;
+    border-color: var(--agri-green-medium);
+    box-shadow: 0 0 0 3px var(--agri-green-100);
+}
+
+.agri-input::placeholder,
+.agri-textarea::placeholder {
+    color: var(--agri-gray-400);
+}
+
+.agri-input.is-error,
+.agri-select.is-error,
+.agri-textarea.is-error {
+    border-color: var(--agri-red);
+}
+
+.agri-input.is-error:focus {
+    box-shadow: 0 0 0 3px var(--agri-red-100);
+}
+
+.agri-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.agri-form-hint {
+    margin-top: var(--agri-space-1);
+    font-size: var(--agri-text-xs);
+    color: var(--agri-gray-500);
+}
+
+.agri-form-error {
+    margin-top: var(--agri-space-1);
+    font-size: var(--agri-text-xs);
+    color: var(--agri-red);
+}
+
+/* ============================================================
+   7. CARDS
+   ============================================================ */
+.agri-card {
+    background: var(--agri-surface);
+    border: 1px solid var(--agri-border);
+    border-radius: var(--agri-radius-lg);
+    padding: var(--agri-space-6);
+    box-shadow: var(--agri-shadow-xs);
+    transition: box-shadow var(--agri-transition-base),
+                transform var(--agri-transition-base);
+}
+
+.agri-card-hover:hover {
+    box-shadow: var(--agri-shadow-md);
+    transform: translateY(-2px);
+}
+
+.agri-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--agri-space-4);
+    padding-bottom: var(--agri-space-4);
+    border-bottom: 1px solid var(--agri-border);
+}
+
+.agri-card-title {
+    margin: 0;
+    font-size: var(--agri-text-lg);
+    font-weight: 700;
+}
+
+.agri-card-body {
+    color: var(--agri-gray-600);
+}
+
+.agri-card-footer {
+    margin-top: var(--agri-space-4);
+    padding-top: var(--agri-space-4);
+    border-top: 1px solid var(--agri-border);
+}
+
+/* Stat Card */
+.agri-stat-card {
+    background: var(--agri-surface);
+    border: 1px solid var(--agri-border);
+    border-radius: var(--agri-radius-lg);
+    padding: var(--agri-space-6);
+    position: relative;
+    overflow: hidden;
+}
+
+.agri-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--agri-green-bright);
+}
+
+.agri-stat-card.is-orange::before { background: var(--agri-orange); }
+.agri-stat-card.is-red::before    { background: var(--agri-red); }
+
+.agri-stat-label {
+    font-size: var(--agri-text-sm);
+    color: var(--agri-gray-500);
+    margin-bottom: var(--agri-space-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.agri-stat-value {
+    font-size: var(--agri-text-3xl);
+    font-weight: 800;
+    color: var(--agri-gray-900);
+    line-height: 1.1;
+    margin-bottom: var(--agri-space-1);
+}
+
+.agri-stat-meta {
+    font-size: var(--agri-text-xs);
+    color: var(--agri-gray-500);
+}
+
+/* ============================================================
+   8. BADGES & PILLS
+   ============================================================ */
+.agri-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--agri-space-1);
+    padding: 2px var(--agri-space-3);
+    font-size: var(--agri-text-xs);
+    font-weight: 600;
+    line-height: 1.6;
+    border-radius: var(--agri-radius-full);
+    white-space: nowrap;
+}
+
+.agri-badge-success {
+    background: var(--agri-green-50);
+    color: var(--agri-green-dark);
+}
+
+.agri-badge-warning {
+    background: var(--agri-orange-50);
+    color: var(--agri-orange-900);
+}
+
+.agri-badge-danger {
+    background: var(--agri-red-50);
+    color: var(--agri-red);
+}
+
+.agri-badge-info {
+    background: #E6F0FA;
+    color: var(--agri-info);
+}
+
+.agri-badge-gray {
+    background: var(--agri-gray-100);
+    color: var(--agri-gray-600);
+}
+
+/* ============================================================
+   9. TABLES
+   ============================================================ */
+.agri-table-wrap {
+    overflow-x: auto;
+    background: var(--agri-surface);
+    border: 1px solid var(--agri-border);
+    border-radius: var(--agri-radius-lg);
+}
+
+.agri-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--agri-text-sm);
+}
+
+.agri-table th,
+.agri-table td {
+    padding: var(--agri-space-3) var(--agri-space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--agri-border);
+}
+
+.agri-table th {
+    background: var(--agri-gray-100);
+    font-weight: 700;
+    color: var(--agri-gray-700);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: var(--agri-text-xs);
+}
+
+.agri-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.agri-table tbody tr:hover {
+    background: var(--agri-gray-100);
+}
+
+/* ============================================================
+   10. ALERTS
+   ============================================================ */
+.agri-alert {
+    padding: var(--agri-space-4);
+    border-radius: var(--agri-radius-md);
+    border-left: 4px solid;
+    margin-bottom: var(--agri-space-4);
+    font-size: var(--agri-text-sm);
+}
+
+.agri-alert-success {
+    background: var(--agri-green-50);
+    border-color: var(--agri-success);
+    color: var(--agri-green-dark);
+}
+
+.agri-alert-warning {
+    background: var(--agri-orange-50);
+    border-color: var(--agri-warning);
+    color: var(--agri-orange-900);
+}
+
+.agri-alert-danger {
+    background: var(--agri-red-50);
+    border-color: var(--agri-danger);
+    color: var(--agri-red);
+}
+
+.agri-alert-info {
+    background: #E6F0FA;
+    border-color: var(--agri-info);
+    color: var(--agri-info);
+}
+
+/* ============================================================
+   11. NAVBAR (PUBLIC)
+   ============================================================ */
+.agri-navbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--agri-z-sticky);
+    background: var(--agri-white);
+    border-bottom: 1px solid var(--agri-border);
+    height: var(--agri-header-height);
+    box-shadow: var(--agri-shadow-xs);
+}
+
+.agri-navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    max-width: var(--agri-container-max);
+    margin: 0 auto;
+    padding: 0 var(--agri-space-4);
+}
+
+.agri-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--agri-space-2);
+    font-weight: 800;
+    font-size: var(--agri-text-lg);
+    color: var(--agri-green-dark);
+    text-decoration: none;
+}
+
+.agri-logo:hover {
+    text-decoration: none;
+    color: var(--agri-green-dark);
+}
+
+.agri-logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--agri-radius-md);
+    background: linear-gradient(135deg,
+                var(--agri-green-medium) 0%,
+                var(--agri-green-bright) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--agri-white);
+    font-weight: 800;
+    font-size: var(--agri-text-sm);
+}
+
+.agri-nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--agri-space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.agri-nav-links a {
+    color: var(--agri-gray-600);
+    font-weight: 500;
+    font-size: var(--agri-text-sm);
+    text-decoration: none;
+    padding: var(--agri-space-2) 0;
+    border-bottom: 2px solid transparent;
+    transition: color var(--agri-transition-fast),
+                border-color var(--agri-transition-fast);
+}
+
+.agri-nav-links a:hover,
+.agri-nav-links a.is-active {
+    color: var(--agri-green-medium);
+    border-bottom-color: var(--agri-green-medium);
+    text-decoration: none;
+}
+
+/* ============================================================
+   12. FOOTER (PUBLIC)
+   ============================================================ */
+.agri-footer {
+    background: var(--agri-gray-900);
+    color: var(--agri-gray-300);
+    padding: var(--agri-space-12) 0 var(--agri-space-6);
+    margin-top: var(--agri-space-16);
+}
+
+.agri-footer h5 {
+    color: var(--agri-white);
+    font-size: var(--agri-text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--agri-space-4);
+}
+
+.agri-footer a {
+    color: var(--agri-gray-300);
+    font-size: var(--agri-text-sm);
+    display: block;
+    padding: var(--agri-space-1) 0;
+}
+
+.agri-footer a:hover {
+    color: var(--agri-green-bright);
+    text-decoration: none;
+}
+
+.agri-footer-bottom {
+    margin-top: var(--agri-space-8);
+    padding-top: var(--agri-space-6);
+    border-top: 1px solid var(--agri-gray-700);
+    font-size: var(--agri-text-xs);
+    color: var(--agri-gray-500);
+    text-align: center;
+}
+
+/* ============================================================
+   13. HERO (LANDING)
+   ============================================================ */
+.agri-hero {
+    position: relative;
+    padding: var(--agri-space-20) 0;
+    background: linear-gradient(135deg,
+                var(--agri-green-dark) 0%,
+                var(--agri-green-medium) 60%,
+                var(--agri-green-bright) 100%);
+    color: var(--agri-white);
+    overflow: hidden;
+}
+
+.agri-hero::after {
+    content: '';
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.agri-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+}
+
+.agri-hero h1 {
+    color: var(--agri-white);
+    font-size: var(--agri-text-5xl);
+    margin-bottom: var(--agri-space-6);
+}
+
+.agri-hero p {
+    font-size: var(--agri-text-lg);
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: var(--agri-space-8);
+}
+
+.agri-hero-actions {
+    display: flex;
+    gap: var(--agri-space-4);
+    flex-wrap: wrap;
+}
+
+.agri-hero .agri-btn-secondary {
+    background: transparent;
+    color: var(--agri-white);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.agri-hero .agri-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--agri-white);
+}
+
+/* ============================================================
+   14. PAGE HEADER
+   ============================================================ */
+.agri-page-header {
+    background: var(--agri-white);
+    border-bottom: 1px solid var(--agri-border);
+    padding: var(--agri-space-10) 0;
+    margin-bottom: var(--agri-space-10);
+}
+
+.agri-page-header h1 {
+    margin-bottom: var(--agri-space-2);
+}
+
+.agri-page-header p {
+    color: var(--agri-gray-500);
+    margin: 0;
+    font-size: var(--agri-text-lg);
+}
+
+/* ============================================================
+   15. EMPTY STATE
+   ============================================================ */
+.agri-empty {
+    text-align: center;
+    padding: var(--agri-space-12) var(--agri-space-6);
+    color: var(--agri-gray-500);
+}
+
+.agri-empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--agri-space-4);
+    opacity: 0.4;
+}
+
+.agri-empty h3 {
+    color: var(--agri-gray-700);
+    margin-bottom: var(--agri-space-2);
+}
+
+/* ============================================================
+   16. UTILITIES
+   ============================================================ */
+.agri-mt-0 { margin-top: 0; }
+.agri-mt-2 { margin-top: var(--agri-space-2); }
+.agri-mt-4 { margin-top: var(--agri-space-4); }
+.agri-mt-6 { margin-top: var(--agri-space-6); }
+.agri-mt-8 { margin-top: var(--agri-space-8); }
+
+.agri-mb-0 { margin-bottom: 0; }
+.agri-mb-2 { margin-bottom: var(--agri-space-2); }
+.agri-mb-4 { margin-bottom: var(--agri-space-4); }
+.agri-mb-6 { margin-bottom: var(--agri-space-6); }
+.agri-mb-8 { margin-bottom: var(--agri-space-8); }
+
+.agri-p-0  { padding: 0; }
+.agri-p-4  { padding: var(--agri-space-4); }
+.agri-p-6  { padding: var(--agri-space-6); }
+
+.agri-hidden { display: none !important; }
+.agri-sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+.agri-rounded { border-radius: var(--agri-radius-md); }
+.agri-shadow  { box-shadow: var(--agri-shadow-md); }
+
+.agri-nav-links a.agri-nav-cta {
+    color: var(--agri-white) !important;
+    border-bottom: none;
+}
+.agri-nav-links a.agri-nav-cta:hover {
+    color: var(--agri-white) !important;
+    background: var(--agri-green-dark);
+    border-bottom: none;
+}

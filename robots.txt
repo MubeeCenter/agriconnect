@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /logs/
+Disallow: /database/
+Disallow: /api/
+
+Sitemap: https://biz.mubeetech.com.ng/sitemap.xml
