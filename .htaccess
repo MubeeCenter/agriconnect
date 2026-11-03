@@ -1,0 +1,191 @@
+# ============================================================
+# AGRICONNECT — Apache Configuration
+# ============================================================
+
+# --- Disable Directory Listing ---
+Options -Indexes
+
+# --- Default Charset ---
+AddDefaultCharset UTF-8
+
+# --- Default Document ---
+DirectoryIndex index.php index.html
+
+# ============================================================
+# FILE PROTECTION
+# ============================================================
+
+# --- Hide Sensitive Files ---
+<FilesMatch "\.(sql|log|md|env|ini|bak|sh|yml|yaml|json|lock|htaccess|htpasswd)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# --- Block Hidden Files (e.g. .git, .env) ---
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# --- Protect Internal Directories ---
+RedirectMatch 403 ^/includes/.*$
+RedirectMatch 403 ^/logs/.*$
+RedirectMatch 403 ^/database/.*$
+RedirectMatch 403 ^/uploads/temp/.*$
+
+# ============================================================
+# ERROR DOCUMENTS
+# ============================================================
+ErrorDocument 403 /404.php
+ErrorDocument 404 /404.php
+ErrorDocument 500 /404.php
+
+# ============================================================
+# SECURITY HEADERS
+# ============================================================
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
+
+    # HSTS — enable ONLY after HTTPS is confirmed working everywhere
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # Remove server signature leaks
+    Header unset X-Powered-By
+    Header unset Server
+</IfModule>
+
+# ============================================================
+# COMPRESSION
+# ============================================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE application/xml application/rss+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+
+    # Don't compress images or already-compressed files
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|ico|zip|gz|rar|7z)$ no-gzip dont-vary
+</IfModule>
+
+# ============================================================
+# BROWSER CACHING
+# ============================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Images
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Assets
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType text/javascript "access plus 1 week"
+
+    # Fonts
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+
+    # HTML — never cache
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # JSON — never cache
+    ExpiresByType application/json "access plus 0 seconds"
+</IfModule>
+
+# ============================================================
+# REWRITE RULES
+# ============================================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # ----------------------------------------------------------
+    # Block obvious exploits in query strings
+    # ----------------------------------------------------------
+    RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} proc/self/environ [OR]
+    RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [OR]
+    RewriteCond %{QUERY_STRING} (<|%3C).*iframe.*(>|%3E) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # ----------------------------------------------------------
+    # Remove trailing slash on files (not directories)
+    # ----------------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+    # ----------------------------------------------------------
+    # Preserve existing files and directories (assets, api, admin)
+    # ----------------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # ----------------------------------------------------------
+    # Route everything else to 404.php
+    # (Skips /api/ and /admin/ so their endpoints stay untouched)
+    # ----------------------------------------------------------
+    RewriteCond %{REQUEST_URI} !^/api/
+    RewriteCond %{REQUEST_URI} !^/admin/
+    RewriteRule ^ /404.php [L]
+</IfModule>
+
+# ============================================================
+# BLOCK BAD BOTS
+# ============================================================
+<IfModule mod_setenvif.c>
+    SetEnvIfNoCase User-Agent "^(libwww-perl|curl|wget|python-requests|scrapy)" bad_bot
+    SetEnvIfNoCase User-Agent "^(HTTrack|WebCopier|SiteSnagger)" bad_bot
+    SetEnvIfNoCase User-Agent "^(SemrushBot|AhrefsBot|MJ12bot)" bad_bot
+
+    <IfModule mod_authz_core.c>
+        <RequireAll>
+            Require all granted
+            Require not env bad_bot
+        </RequireAll>
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+        Deny from env=bad_bot
+    </IfModule>
+</IfModule>
+
+# ============================================================
+# PHP SETTINGS (override only if your host allows)
+# ============================================================
+<IfModule mod_php.c>
+    php_flag display_errors off
+    php_flag log_errors on
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 30
+    php_value session.cookie_httponly 1
+    php_value session.use_only_cookies 1
+</IfModule>
+
+# ============================================================
+# END OF CONFIG
+# ============================================================

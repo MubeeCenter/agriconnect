@@ -1,0 +1,20 @@
+# Create the .gitignore file
+@"
+# Secrets & Environment
+includes/secrets.php
+.env
+
+# Logs (never commit these - they contain PII)
+logs/*
+!logs/.gitkeep
+api/error_log
+
+# Uploads
+uploads/*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+"@ | Out-File -FilePath .gitignore -Encoding utf8

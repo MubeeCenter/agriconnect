@@ -1,0 +1,14 @@
+# Deny all direct access to files in /includes/
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
+
+# Also block directory listing and PHP execution in this folder
+Options -Indexes
+<FilesMatch "\.(php|ini|log|sql|md|json)$">
+    Require all denied
+</FilesMatch>
