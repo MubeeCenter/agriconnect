@@ -16,7 +16,7 @@ if (!is_dir($baseDir . '/logs')) {
 ini_set('error_log', $baseDir . '/logs/error.log');
 
 // ============================================
-// BOOTSTRAP — includes airtime wrapper for rewards
+// BOOTSTRAP
 // ============================================
 $required = [
     'config.php',
@@ -102,6 +102,7 @@ try {
     // LEVEL 2
     // ============================================
     elseif ($level === 2) {
+        // --- Price path: 1 → crop ---
         if ($input[0] === '1') {
             if ($input[1] === '0') {
                 $response = mainMenu();
@@ -114,6 +115,7 @@ try {
                 }
             }
         }
+        // --- Dealer path: 2 → market ---
         elseif ($input[0] === '2') {
             if ($input[1] === '0') {
                 $response = mainMenu();
@@ -126,6 +128,7 @@ try {
                 }
             }
         }
+        // --- Pest report back ---
         elseif ($input[0] === '3' && $input[1] === '0') {
             $response = mainMenu();
         }
@@ -135,9 +138,10 @@ try {
     }
 
     // ============================================
-    // LEVEL 3
+    // LEVEL 3 (Price Display & Dealer Detail)
     // ============================================
     elseif ($level === 3) {
+        // --- Price path: 1*crop*market → show price ---
         if ($input[0] === '1') {
             $crop   = mapCrop($input[1]);
             $market = mapMarket($input[2]);
@@ -163,6 +167,7 @@ try {
                     $response .= "Updated: $updated\n\n";
                     $response .= "1. Find Dealer\n";
                     $response .= "2. Get SMS Alerts\n";
+                    // Show Confirm option if user hasn't verified yet
                     if (!$alreadyVerified) {
                         $response .= "3. Confirm this Price\n";
                     }
@@ -174,6 +179,7 @@ try {
                 }
             }
         }
+        // --- Dealer path: 2*market*dealerId → show dealer details ---
         elseif ($input[0] === '2') {
             $dealerId = $input[2] ?? null;
             if ($dealerId && $dealerId !== '0') {
@@ -198,15 +204,17 @@ try {
     }
 
     // ============================================
-    // LEVEL 4
+    // LEVEL 4 (Price Action & Dealer Action)
     // ============================================
     elseif ($level === 4) {
-        // --- Price path actions ---
+        // --- Price path actions (1*crop*market*action) ---
         if ($input[0] === '1' && $input[3] === '1') {
+            // Find Dealer
             $market = mapMarket($input[2]);
             $response = buildDealerMenu($market);
         }
         elseif ($input[0] === '1' && $input[3] === '2') {
+            // Enable SMS Alerts
             enableFarmerAlerts($phoneNumber);
             sendSMS(
                 $phoneNumber,
@@ -217,7 +225,7 @@ try {
                         "Thank you for using AgriConnect.";
         }
         elseif ($input[0] === '1' && $input[3] === '3') {
-            // === CONFIRM PRICE (with airtime reward) ===
+            // === CONFIRM PRICE (with Airtime Reward) ===
             $crop   = mapCrop($input[1]);
             $market = mapMarket($input[2]);
             $listing = getLatestPrice($crop, $market);
@@ -233,13 +241,9 @@ try {
                 $count   = (int)($listing['verification_count'] ?? 0);
                 $isVer   = !empty($listing['is_verified']);
 
-                // ============================================
-                // AIRTIME REWARD — fires when THIS verification
-                // pushed the listing to Verified status
-                // ============================================
+                // Airtime reward if it just got verified
                 $rewardLine = '';
-                if ($result['success'] && $isVer
-                    && function_exists('reward_verification_winner')) {
+                if ($result['success'] && $isVer && function_exists('reward_verification_winner')) {
                     $reward = reward_verification_winner($phoneNumber, (int)$listing['id']);
                     if (!empty($reward['success'])) {
                         $rewardLine = "You earned ₦" . (int)AIRTIME_REWARD_VERIFIED . " airtime!";
@@ -267,7 +271,7 @@ try {
         elseif ($input[0] === '1' && $input[3] === '0') {
             $response = mainMenu();
         }
-        // --- Dealer path actions ---
+        // --- Dealer path actions (2*market*dealerId*action) ---
         elseif ($input[0] === '2') {
             $dealerId = $input[2] ?? null;
             $action   = $input[3] ?? null;
@@ -384,6 +388,7 @@ try {
         }
     }
 
+    // Fallback
     else {
         $response = "END Session ended. Dial " . AT_USSD_CODE . " to start again.";
     }

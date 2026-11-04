@@ -79,10 +79,31 @@ require __DIR__ . '/partials/hero.php';
             </div>
         </div>
 
+        <!-- NEW: Web Verification Card -->
+        <?php if (!$listing['is_verified']): ?>
+            <div class="agri-card agri-mb-6" style="background:var(--agri-orange-50);border-color:var(--agri-orange-200);">
+                <h3 style="color:var(--agri-orange-900);margin-top:0;">Are you at this market?</h3>
+                <p class="agri-text-muted">Help other farmers by confirming this price. Three independent confirmations will mark it as Verified and earn you airtime.</p>
+                
+                <form id="verify-form">
+                    <div class="agri-flex" style="gap:12px;align-items:flex-end;flex-wrap:wrap;">
+                        <div class="agri-form-group" style="flex:1;min-width:200px;margin:0;">
+                            <label class="agri-label">Your Phone Number</label>
+                            <input type="tel" id="verify-phone" class="agri-input" required placeholder="08012345678" data-format-phone>
+                        </div>
+                        <button type="submit" class="agri-btn agri-btn-primary" id="verify-btn" style="height:42px;">
+                            Confirm Price
+                        </button>
+                    </div>
+                    <div id="verify-message" class="agri-mt-4" style="display:none;"></div>
+                </form>
+            </div>
+        <?php endif; ?>
+
         <div class="agri-card agri-mb-6">
             <h3>Verification History</h3>
             <p class="agri-text-muted">
-                Each verification is an SMS confirmation from a farmer physically present at the market.
+                Each verification is a confirmation from a farmer physically present at the market.
             </p>
 
             <?php if (empty($verifications)): ?>
@@ -116,4 +137,56 @@ require __DIR__ . '/partials/hero.php';
     </div>
 </section>
 
-<?php require_once __DIR__ . '/partials/footer.php';
+<!-- NEW: AJAX Script for Verification -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('verify-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('verify-btn');
+        const phone = document.getElementById('verify-phone').value;
+        const msg = document.getElementById('verify-message');
+        
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+        msg.style.display = 'none';
+
+        const formData = new FormData();
+        formData.append('listing_id', <?= (int)$listing['id'] ?>);
+        formData.append('phone', phone);
+        formData.append('source', 'web');
+
+        fetch('<?= BASE_URL ?>/api/verify-price.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            msg.style.display = 'block';
+            if (data.success) {
+                msg.className = 'agri-alert agri-alert-success';
+                msg.innerHTML = '<strong>Success!</strong> ' + data.message;
+                // Reload page after 1.5s to show updated count and hide the form
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                msg.className = 'agri-alert agri-alert-danger';
+                msg.textContent = data.message;
+                btn.disabled = false;
+                btn.textContent = 'Confirm Price';
+            }
+        })
+        .catch(err => {
+            msg.style.display = 'block';
+            msg.className = 'agri-alert agri-alert-danger';
+            msg.textContent = 'Network error. Please try again.';
+            btn.disabled = false;
+            btn.textContent = 'Confirm Price';
+        });
+    });
+});
+</script>
+
+<?php require_once __DIR__ . '/partials/footer.php'; ?>

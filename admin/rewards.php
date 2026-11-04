@@ -6,7 +6,7 @@ $pageTitle    = 'Rewards';
 $pageSubtitle = 'Airtime & data rewards sent to farmers';
 $currentPage  = 'rewards';
 
-$type = $_GET['type'] ?? 'airtime'; // 'airtime' | 'data'
+$type = $_GET['type'] ?? 'airtime';
 if (!in_array($type, ['airtime', 'data'], true)) $type = 'airtime';
 
 // ============================================
@@ -19,26 +19,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // -------- Send test airtime --------
     if ($action === 'test_airtime') {
-        $phone  = normalize_phone($_POST['phone'] ?? '');
-        $amount = (float)($_POST['amount'] ?? 50);
+        $phone = normalize_phone($_POST['phone'] ?? '');
+        
+        // THE ULTIMATE FALLBACK: Guarantee amount is always 50 if missing
+        $amount = isset($_POST['amount']) && is_numeric($_POST['amount']) ? (float)$_POST['amount'] : 50.00;
 
         if (!is_valid_phone_ng($phone)) {
             flash_set('danger', 'Please enter a valid Nigerian phone number.');
-        } elseif (!function_exists('at_send_airtime')) {
-            flash_set('danger', 'Airtime wrapper not loaded.');
         } else {
             $result = at_send_airtime($phone, $amount);
             if (!empty($result['success'])) {
-                // Also log to our table
                 agri_query(
-                    "INSERT INTO agri_airtime_rewards
-                     (phone, amount, currency, reason, status, at_response, sent_at)
-                     VALUES (?, ?, 'NGN', 'admin_test', 'sent', ?, NOW())",
+                    "INSERT INTO agri_airtime_rewards (phone, amount, currency, reason, status, at_response, sent_at) 
+                     VALUES (?, ?, 'NGN', 'admin_test', 'sent', ?, NOW())", 
                     [$phone, $amount, json_encode($result['data'])]
                 );
-                flash_set('success', "Sent ₦{$amount} airtime to {$phone}.");
+                flash_set('success', "Sent â‚¦{$amount} airtime to {$phone}.");
             } else {
-                flash_set('danger', 'Airtime send failed: ' . ($result['message'] ?? 'unknown'));
+                agri_query(
+                    "INSERT INTO agri_airtime_rewards (phone, amount, currency, reason, status, at_response, sent_at) 
+                     VALUES (?, ?, 'NGN', 'admin_test', 'failed', ?, NOW())", 
+                    [$phone, $amount, json_encode($result['data'])]
+                );
+                flash_set('warning', 'Airtime request failed. AT returned: ' . ($result['message'] ?? 'unknown'));
             }
         }
         header('Location: rewards.php?type=airtime');
@@ -53,14 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!is_valid_phone_ng($phone)) {
             flash_set('danger', 'Please enter a valid Nigerian phone number.');
-        } elseif (!function_exists('reward_data_bundle')) {
-            flash_set('danger', 'Data wrapper not loaded.');
         } else {
             $result = reward_data_bundle($phone, 'admin_test');
             if (!empty($result['success'])) {
                 flash_set('success', "Sent {$quantity} {$unit} data bundle to {$phone}.");
             } else {
-                flash_set('danger', 'Data send failed: ' . ($result['message'] ?? 'unknown'));
+                flash_set('warning', 'Data request failed. AT returned: ' . ($result['message'] ?? 'unknown'));
             }
         }
         header('Location: rewards.php?type=data');
@@ -69,37 +70,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ============================================
-// PAGINATION
+// PAGINATION & TOTALS
 // ============================================
 $page = max(1, (int)($_GET['page'] ?? 1));
 
 if ($type === 'data') {
     $result = paginate(
-        "SELECT COUNT(*) AS c FROM agri_data_rewards",
-        [],
-        "SELECT * FROM agri_data_rewards ORDER BY created_at DESC",
-        [],
+        "SELECT COUNT(*) AS c FROM agri_data_rewards", 
+        [], 
+        "SELECT * FROM agri_data_rewards ORDER BY created_at DESC", 
+        [], 
         $page
     );
 } else {
     $result = paginate(
-        "SELECT COUNT(*) AS c FROM agri_airtime_rewards",
-        [],
-        "SELECT * FROM agri_airtime_rewards ORDER BY created_at DESC",
-        [],
+        "SELECT COUNT(*) AS c FROM agri_airtime_rewards", 
+        [], 
+        "SELECT * FROM agri_airtime_rewards ORDER BY created_at DESC", 
+        [], 
         $page
     );
 }
 
-// ============================================
-// TOTALS
-// ============================================
 $airtimeTotal = agri_fetch_one(
-    "SELECT COALESCE(SUM(amount), 0) AS s, COUNT(*) AS c
+    "SELECT COALESCE(SUM(amount), 0) AS s, COUNT(*) AS c 
      FROM agri_airtime_rewards WHERE status = 'sent'"
 );
 $dataTotal = agri_fetch_one(
-    "SELECT COALESCE(SUM(quantity), 0) AS s, COUNT(*) AS c
+    "SELECT COALESCE(SUM(quantity), 0) AS s, COUNT(*) AS c 
      FROM agri_data_rewards WHERE status = 'sent'"
 );
 
@@ -148,12 +146,10 @@ require __DIR__ . '/partials/topbar.php';
     <!-- Tabs + Table -->
     <div class="admin-card">
         <div class="admin-filters">
-            <a href="?type=airtime"
-               class="agri-btn agri-btn-sm <?= $type === 'airtime' ? 'agri-btn-primary' : 'agri-btn-ghost' ?>">
+            <a href="?type=airtime" class="agri-btn agri-btn-sm <?= $type === 'airtime' ? 'agri-btn-primary' : 'agri-btn-ghost' ?>">
                 Airtime Rewards
             </a>
-            <a href="?type=data"
-               class="agri-btn agri-btn-sm <?= $type === 'data' ? 'agri-btn-primary' : 'agri-btn-ghost' ?>">
+            <a href="?type=data" class="agri-btn agri-btn-sm <?= $type === 'data' ? 'agri-btn-primary' : 'agri-btn-ghost' ?>">
                 Data Rewards
             </a>
         </div>
@@ -161,7 +157,7 @@ require __DIR__ . '/partials/topbar.php';
         <div class="admin-card-body admin-card-body-flush">
             <?php if (empty($result['rows'])): ?>
                 <div class="agri-empty">
-                    <div class="agri-empty-icon">💰</div>
+                    <div class="agri-empty-icon">ðŸ’°</div>
                     <h3>No <?= e($type) ?> rewards yet</h3>
                     <p>Rewards appear here as farmers submit prices and confirm listings.</p>
                 </div>
@@ -207,16 +203,14 @@ require __DIR__ . '/partials/topbar.php';
 
 </div>
 
-<!-- ============================================
-     Send Test Airtime Modal
-     ============================================ -->
+<!-- Send Test Airtime Modal (REMOVED data-loading-form) -->
 <div class="admin-modal-backdrop" id="test-airtime">
     <div class="admin-modal">
         <div class="admin-modal-header">
             <h3 class="admin-modal-title">Send Test Airtime</h3>
             <button class="admin-modal-close" data-modal-close>&times;</button>
         </div>
-        <form method="post" data-validate-form data-loading-form>
+        <form method="post">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="test_airtime">
 
@@ -228,12 +222,10 @@ require __DIR__ . '/partials/topbar.php';
                 </div>
                 <div class="agri-form-group">
                     <label class="agri-label agri-label-required">Amount (NGN)</label>
-                    <input type="text" name="amount" class="agri-input" required
-                           data-format-number value="50">
+                    <input type="number" step="any" name="amount" class="agri-input" required value="50">
                 </div>
                 <div class="agri-alert agri-alert-info">
                     This sends real airtime via the Africa's Talking Airtime API.
-                    Sandbox mode will not deliver real value but the call flow is tested.
                 </div>
             </div>
             <div class="admin-modal-footer">
@@ -244,16 +236,14 @@ require __DIR__ . '/partials/topbar.php';
     </div>
 </div>
 
-<!-- ============================================
-     Send Test Data Modal
-     ============================================ -->
+<!-- Send Test Data Modal (REMOVED data-loading-form) -->
 <div class="admin-modal-backdrop" id="test-data">
     <div class="admin-modal">
         <div class="admin-modal-header">
             <h3 class="admin-modal-title">Send Test Data Bundle</h3>
             <button class="admin-modal-close" data-modal-close>&times;</button>
         </div>
-        <form method="post" data-validate-form data-loading-form>
+        <form method="post">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="test_data">
 
@@ -265,8 +255,7 @@ require __DIR__ . '/partials/topbar.php';
                 </div>
                 <div class="agri-form-group">
                     <label class="agri-label agri-label-required">Quantity</label>
-                    <input type="text" name="quantity" class="agri-input" required
-                           data-format-number value="500">
+                    <input type="number" name="quantity" class="agri-input" required value="500">
                 </div>
                 <div class="agri-form-group">
                     <label class="agri-label agri-label-required">Unit</label>

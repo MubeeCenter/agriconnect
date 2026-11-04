@@ -1,16 +1,6 @@
 <?php
 /**
  * AgriConnect — Daily Price Broadcast
- *
- * Sends a daily SMS price summary to all opted-in farmers.
- * Segmented by the farmer's region.
- *
- * Usage:
- *   CLI: php admin/send-price-broadcast.php
- *   Web: /admin/send-price-broadcast.php?cron=1&key=YOUR_CRON_KEY
- *
- * Cron (once daily at 6 AM Lagos):
- *   0 6 * * * /usr/bin/php /home/mubeetec/biz.mubeetech.com.ng/admin/send-price-broadcast.php
  */
 
 // ============================================
@@ -26,7 +16,6 @@ $isCli = (php_sapi_name() === 'cli');
 
 if (!$isCli) {
     // Web access requires a valid cron key.
-    // Fail CLOSED if CRON_KEY is not configured.
     if (!defined('CRON_KEY') || CRON_KEY === '') {
         http_response_code(403);
         exit('Forbidden — CRON_KEY not configured.');
@@ -37,8 +26,6 @@ if (!$isCli) {
         http_response_code(403);
         exit('Forbidden — invalid cron key.');
     }
-
-    header('Content-Type: text/plain');
 }
 
 // ============================================
@@ -48,7 +35,7 @@ $logDir = LOG_DIR;
 if (!is_dir($logDir)) @mkdir($logDir, 0755, true);
 
 // ============================================
-// FETCH: opted-in farmers + verified listings in their region
+// FETCH: opted-in farmers + verified listings
 // ============================================
 $rows = agri_fetch_all("
     SELECT f.phone, f.state,
@@ -62,7 +49,15 @@ $rows = agri_fetch_all("
 
 if (empty($rows)) {
     log_write('broadcast', "No opted-in farmers or no verified listings. Aborting.");
-    exit("No sends.\n");
+    if ($isCli) {
+        exit("No sends.\n");
+    } else {
+        if (function_exists('flash_set') && function_exists('redirect')) {
+            flash_set('warning', 'Broadcast aborted: No opted-in farmers or verified listings found.');
+            redirect('/admin/rewards.php');
+        }
+        exit("No sends.\n");
+    }
 }
 
 // ============================================
@@ -80,7 +75,6 @@ foreach ($rows as $row) {
         ];
     }
 
-    // Only keep the most recent per crop (query ordered DESC)
     if (!isset($grouped[$phone]['crops'][$crop])) {
         $grouped[$phone]['crops'][$crop] = $row;
     }
@@ -121,4 +115,15 @@ $summary = "Broadcast complete ($source) | Sent: $sent | Failed: $failed | "
          . "Farmers: " . count($grouped) . " | Started: $startedAt";
 log_write('broadcast', $summary);
 
-echo $summary . "\n";
+if ($isCli) {
+    echo $summary . "\n";
+} else {
+    // If triggered from the browser, redirect back to dashboard with a flash message
+    if (function_exists('flash_set') && function_exists('redirect')) {
+        flash_set('success', $summary);
+        redirect('/admin/rewards.php');
+    } else {
+        header('Content-Type: text/plain');
+        echo $summary;
+    }
+}

@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+.env.*
+logs/*.log
+uploads/*
+*.md
+!README.md
+.DS_Store
+.idea
+.vscode
+secrets.php
+includes/secrets.php
